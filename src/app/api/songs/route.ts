@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { autoSpaceChords } from "@/lib/chords";
+import { fetchLyrics } from "@/lib/lyrics";
 
 export async function GET(request: NextRequest) {
   const instrument = request.nextUrl.searchParams.get("instrument");
@@ -36,15 +37,11 @@ export async function POST(request: NextRequest) {
 
   const spacedChords = autoSpaceChords(chords);
 
-  // Try to fetch lyrics automatically
   let lyrics = null;
   try {
-    const lyricsRes = await fetch(
-      `${request.nextUrl.origin}/api/lyrics?name=${encodeURIComponent(name)}`
-    );
-    if (lyricsRes.ok) {
-      const lyricsData = await lyricsRes.json();
-      lyrics = lyricsData.lyrics;
+    const result = await fetchLyrics(name);
+    if (result) {
+      lyrics = result.lyrics;
     }
   } catch {
     // Lyrics fetch is best-effort
