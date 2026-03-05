@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from("songs")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("name", { ascending: true });
 
   if (instrument) {
     query = query.eq("instrument", instrument);
