@@ -20,8 +20,8 @@ export default function GuitarPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-xl px-6 py-10">
-        <nav className="mb-10">
+      <div className="mx-auto max-w-sm px-5 py-8">
+        <nav className="mb-6">
           <Link
             href="/"
             className="text-sm text-muted hover:text-foreground transition-colors"
@@ -30,42 +30,37 @@ export default function GuitarPage() {
           </Link>
         </nav>
 
-        <header className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            🎸 Guitar
-          </h1>
-          {!loading && (
-            <p className="mt-1 text-xs text-muted uppercase tracking-wide">
-              {songs.length} {songs.length === 1 ? "song" : "songs"}
-            </p>
-          )}
-        </header>
+        <h1 className="text-xl font-bold tracking-tight text-foreground mb-1">
+          🎸 Guitar
+        </h1>
+        {!loading && (
+          <p className="text-xs text-muted mb-6">
+            {songs.length} {songs.length === 1 ? "song" : "songs"}
+          </p>
+        )}
 
         {loading ? (
           <p className="text-sm text-muted">Loading...</p>
         ) : songs.length === 0 ? (
-          <div className="rounded-2xl bg-card-bg p-12 text-center ring-1 ring-card-border shadow-sm">
-            <p className="text-sm text-muted mb-3">No songs yet</p>
-            <Link
-              href="/"
-              className="text-sm font-medium text-accent hover:text-accent-hover"
-            >
+          <div className="rounded-xl bg-card-bg border border-card-border p-10 text-center">
+            <p className="text-sm text-muted mb-2">No songs yet</p>
+            <Link href="/" className="text-xs text-accent hover:text-accent-hover">
               Add your first →
             </Link>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {songs.map((song) => (
               <Link
                 key={song.id}
                 href={`/song/${song.id}`}
-                className="flex items-center justify-between rounded-xl bg-card-bg px-5 py-4 ring-1 ring-card-border shadow-sm transition-all hover:shadow-md hover:ring-accent/20 hover:-translate-y-px"
+                className="flex items-center justify-between rounded-lg bg-card-bg border border-card-border px-4 py-3 transition-all hover:border-accent/30 hover:shadow-sm"
               >
-                <span className="font-medium text-foreground text-sm">
+                <span className="text-sm font-medium text-foreground">
                   {song.name}
                 </span>
                 {song.capo && (
-                  <span className="text-[11px] font-semibold text-accent bg-accent/10 px-2.5 py-0.5 rounded-full">
+                  <span className="text-[10px] font-semibold text-chord bg-chord/10 px-2 py-0.5 rounded-full">
                     Capo {song.capo}
                   </span>
                 )}

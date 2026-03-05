@@ -41,8 +41,8 @@ export default function ChordsDictionaryPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-xl px-6 py-10">
-        <nav className="mb-10">
+      <div className="mx-auto max-w-sm px-5 py-8">
+        <nav className="mb-6">
           <Link
             href="/"
             className="text-sm text-muted hover:text-foreground transition-colors"
@@ -51,24 +51,22 @@ export default function ChordsDictionaryPage() {
           </Link>
         </nav>
 
-        <header className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            Chord Dictionary
-          </h1>
-          <p className="mt-1 text-xs text-muted uppercase tracking-wide">
-            {Object.keys(chords).length} chords &middot;{" "}
-            {instrument === "guitar" ? "6" : "4"} strings
-          </p>
-        </header>
+        <h1 className="text-xl font-bold tracking-tight text-foreground mb-1">
+          Chord Dictionary
+        </h1>
+        <p className="text-xs text-muted mb-5">
+          {Object.keys(chords).length} chords &middot;{" "}
+          {instrument === "guitar" ? "6" : "4"} strings
+        </p>
 
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 mb-5">
           {(["guitar", "ukulele"] as const).map((inst) => (
             <button
               key={inst}
               onClick={() => setInstrument(inst)}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+              className={`rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                 instrument === inst
-                  ? "bg-accent text-white shadow-sm"
+                  ? "bg-accent text-white"
                   : "bg-surface text-muted hover:text-foreground"
               }`}
             >
@@ -77,22 +75,22 @@ export default function ChordsDictionaryPage() {
           ))}
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {Object.entries(groups).map(([category, entries]) => (
             <div
               key={category}
-              className="rounded-xl bg-card-bg p-5 ring-1 ring-card-border shadow-sm"
+              className="rounded-lg bg-card-bg border border-card-border px-4 py-3"
             >
-              <h2 className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">
+              <h2 className="text-[10px] font-semibold text-muted uppercase tracking-wide mb-2">
                 {category}
               </h2>
-              <div className="grid grid-cols-2 gap-x-8 gap-y-1 font-mono text-sm">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-0.5 font-mono text-xs">
                 {entries.map(([name, pattern]) => (
                   <div key={name} className="flex items-baseline">
-                    <span className="font-semibold text-foreground w-16 shrink-0">
+                    <span className="font-bold text-foreground w-14 shrink-0">
                       {name}
                     </span>
-                    <span className="text-muted tracking-widest">{pattern}</span>
+                    <span className="text-muted tracking-wider">{pattern}</span>
                   </div>
                 ))}
               </div>

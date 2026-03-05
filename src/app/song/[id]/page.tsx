@@ -65,81 +65,78 @@ export default function SongPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-xl px-6 py-10">
+      <div className="mx-auto max-w-lg px-5 py-8">
         {/* Nav */}
-        <nav className="flex items-center justify-between mb-10">
+        <nav className="flex items-center justify-between mb-6">
           <Link
             href={`/${song.instrument}`}
             className="text-sm text-muted hover:text-foreground transition-colors"
           >
             ← Back
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <Link
               href={`/song/${id}/edit`}
-              className="text-xs text-muted hover:text-foreground transition-colors uppercase tracking-wide"
+              className="text-xs text-muted hover:text-foreground transition-colors"
             >
               Edit
             </Link>
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="text-xs text-muted hover:text-red-500 transition-colors uppercase tracking-wide disabled:opacity-50"
+              className="text-xs text-muted hover:text-red-500 transition-colors disabled:opacity-50"
             >
               {deleting ? "..." : "Delete"}
             </button>
           </div>
         </nav>
 
-        {/* Song Name */}
-        <h1 className="text-2xl font-bold tracking-tight text-foreground leading-snug">
-          {song.name}
-        </h1>
-
-        {/* Capo */}
-        {song.capo && (
-          <div className="mt-3">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent">
+        {/* Song Name + Capo */}
+        <div className="mb-5">
+          <h1 className="text-xl font-bold tracking-tight text-foreground leading-tight">
+            {song.name}
+          </h1>
+          {song.capo && (
+            <p className="mt-1 text-sm font-medium text-chord">
               Capo {song.capo}
-            </span>
-          </div>
-        )}
+            </p>
+          )}
+        </div>
 
         {/* Chord Fingerings */}
         {Object.keys(fingerings).length > 0 && (
-          <div className="mt-8">
-            <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 rounded-xl bg-card-bg p-5 ring-1 ring-card-border shadow-sm">
+          <div className="mb-5 rounded-lg bg-card-bg border border-card-border px-4 py-3">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-0.5 font-mono text-xs">
               {Object.entries(fingerings).map(([name, pattern]) => (
-                <div key={name} className="flex items-baseline font-mono text-sm">
-                  <span className="font-semibold text-foreground w-16 shrink-0">
+                <div key={name} className="flex items-baseline">
+                  <span className="font-bold text-foreground w-14 shrink-0">
                     {name}
                   </span>
-                  <span className="text-muted tracking-widest">{pattern}</span>
+                  <span className="text-muted tracking-wider">{pattern}</span>
                 </div>
               ))}
             </div>
             {unknownChords.length > 0 && (
-              <p className="mt-2 text-xs text-muted/60 pl-1">
-                Not in dictionary: {unknownChords.join(", ")}
+              <p className="mt-2 text-[11px] text-muted/50 border-t border-card-border pt-2">
+                Unknown: {unknownChords.join(", ")}
               </p>
             )}
           </div>
         )}
 
         {/* Chords */}
-        <div className="mt-8">
-          <pre className="font-mono text-[13px] leading-relaxed whitespace-pre-wrap text-chord font-semibold">
-            {song.chords}
-          </pre>
-        </div>
+        <pre className="font-mono text-xs leading-5 whitespace-pre-wrap text-chord font-bold mb-5">
+          {song.chords}
+        </pre>
 
         {/* Lyrics */}
         {song.lyrics && (
-          <div className="mt-10 pt-8 border-t border-card-border">
-            <pre className="font-sans text-[13px] leading-7 whitespace-pre-wrap text-foreground/70">
+          <>
+            <hr className="border-card-border mb-5" />
+            <pre className="font-sans text-sm leading-5 whitespace-pre-wrap text-foreground/70">
               {song.lyrics}
             </pre>
-          </div>
+          </>
         )}
       </div>
     </div>

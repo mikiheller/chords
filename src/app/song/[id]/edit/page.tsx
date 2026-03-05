@@ -90,8 +90,8 @@ export default function EditSongPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-xl px-6 py-10">
-        <nav className="mb-10">
+      <div className="mx-auto max-w-lg px-5 py-8">
+        <nav className="mb-6">
           <Link
             href={`/song/${id}`}
             className="text-sm text-muted hover:text-foreground transition-colors"
@@ -100,13 +100,13 @@ export default function EditSongPage() {
           </Link>
         </nav>
 
-        <h1 className="text-2xl font-bold tracking-tight text-foreground mb-8">
+        <h1 className="text-xl font-bold tracking-tight text-foreground mb-6">
           Edit Song
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {error && (
-            <div className="rounded-lg bg-red-50 ring-1 ring-red-200 p-3 text-sm text-red-600">
+            <div className="rounded-lg bg-red-50 border border-red-200 p-2.5 text-xs text-red-600">
               {error}
             </div>
           )}
@@ -117,9 +117,9 @@ export default function EditSongPage() {
                 key={inst}
                 type="button"
                 onClick={() => setInstrument(inst)}
-                className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium transition-all ${
                   instrument === inst
-                    ? "bg-accent text-white shadow-sm"
+                    ? "bg-accent text-white"
                     : "bg-surface text-muted hover:text-foreground"
                 }`}
               >
@@ -128,63 +128,45 @@ export default function EditSongPage() {
             ))}
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full rounded-lg bg-surface px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
-            />
-          </div>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            placeholder="Song name"
+            className="w-full rounded-lg bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+          />
 
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Capo <span className="normal-case text-muted/50">optional</span>
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="12"
-              value={capo}
-              onChange={(e) => setCapo(e.target.value)}
-              placeholder="e.g. 6"
-              className="w-24 rounded-lg bg-surface px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
-            />
-          </div>
+          <input
+            type="number"
+            min="1"
+            max="12"
+            value={capo}
+            onChange={(e) => setCapo(e.target.value)}
+            placeholder="Capo (optional)"
+            className="w-24 rounded-lg bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+          />
 
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Chords
-            </label>
-            <textarea
-              value={chords}
-              onChange={(e) => setChords(e.target.value)}
-              required
-              rows={8}
-              className="w-full rounded-lg bg-surface px-4 py-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent/30"
-            />
-          </div>
+          <textarea
+            value={chords}
+            onChange={(e) => setChords(e.target.value)}
+            required
+            rows={8}
+            className="w-full rounded-lg bg-surface px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent/20"
+          />
 
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Lyrics
-            </label>
-            <textarea
-              value={lyrics}
-              onChange={(e) => setLyrics(e.target.value)}
-              rows={16}
-              className="w-full rounded-lg bg-surface px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
-            />
-          </div>
+          <textarea
+            value={lyrics}
+            onChange={(e) => setLyrics(e.target.value)}
+            rows={16}
+            placeholder="Lyrics"
+            className="w-full rounded-lg bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/20"
+          />
 
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white shadow-sm shadow-accent/20 transition-all hover:bg-accent-hover disabled:opacity-50"
+            className="w-full rounded-lg bg-accent px-3 py-2 text-sm font-medium text-white transition-all hover:bg-accent-hover disabled:opacity-50"
           >
             {saving ? "Saving..." : "Save Changes"}
           </button>
