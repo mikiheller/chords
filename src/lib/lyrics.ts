@@ -5,6 +5,12 @@ export async function fetchLyrics(
   if (!geniusToken) return null;
 
   try {
+    // Strip "by" and everything after to get a cleaner song title for matching
+    const titleForMatch = name
+      .replace(/\s+by\s+.*/i, "")
+      .trim()
+      .toLowerCase();
+
     const searchRes = await fetch(
       `https://api.genius.com/search?q=${encodeURIComponent(name)}`,
       { headers: { Authorization: `Bearer ${geniusToken}` } }
@@ -17,7 +23,14 @@ export async function fetchLyrics(
 
     if (!hits || hits.length === 0) return null;
 
-    const songUrl = hits[0].result.url;
+    // Find the best matching hit — prefer results whose title matches the song name
+    const bestHit =
+      hits.find((h: { result: { title: string } }) =>
+        h.result.title.toLowerCase().includes(titleForMatch) ||
+        titleForMatch.includes(h.result.title.toLowerCase())
+      ) || hits[0];
+
+    const songUrl = bestHit.result.url;
 
     const pageRes = await fetch(songUrl);
     if (!pageRes.ok) return null;
@@ -50,6 +63,10 @@ export async function fetchLyrics(
       .join("\n\n");
 
     lyrics = lyrics.replace(/\n{3,}/g, "\n\n").trim();
+
+    // Strip the "X Contributors...Lyrics" header Genius adds
+    lyrics = lyrics.replace(/^\d+\s+Contributors?\s*\n*/i, "");
+    lyrics = lyrics.replace(/^.*Lyrics\s*\n*/i, "");
 
     return { lyrics, source: songUrl };
   } catch {
