@@ -255,15 +255,45 @@ export const ukuleleChords: Record<string, string> = {
   Aaug: "2110",
   Caug: "1003",
   Eaug: "1003",
+
+  // 7sus
+  G7sus: "0213",
 };
 
-// Greedy regex to match a single chord token from the start of a string.
+// Case-insensitive regex to match a single chord token from the start of a string.
 // Order matters: longer modifiers first so "maj7" matches before "m".
 const SINGLE_CHORD =
-  /^[A-G][#b]?(?:maj7|min7|maj|min|add[249]|sus[24]|dim|aug|m7|m6|m9|m|7|9|11|13|6|5)?(?:\/[A-G][#b]?)?/;
+  /^[A-Ga-g][#b]?(?:maj7|min7|maj|min|add[249]|sus[24]|dim|aug|m7|m6|m9|m|7sus|7|9|11|13|6|5)?(?:\/[A-Ga-g][#b]?)?/i;
 
 /**
- * Splits a token like "GAmD7G7" into "G Am D7 G7".
+ * Fixes chord casing: "DM" → "Dm", "EM7" → "Em7", "CADD9" → "Cadd9"
+ * Root note uppercase, everything else lowercase.
+ */
+function fixChordCase(chord: string): string {
+  if (chord.length === 0) return chord;
+
+  // Handle slash chords: fix each part
+  const slashIdx = chord.indexOf("/");
+  if (slashIdx > 0) {
+    const main = fixChordCase(chord.slice(0, slashIdx));
+    const bass = chord.slice(slashIdx + 1);
+    const fixedBass = bass.length > 0 ? bass[0].toUpperCase() + bass.slice(1).toLowerCase() : bass;
+    return main + "/" + fixedBass;
+  }
+
+  // Root note uppercase, optional # or b stays, rest lowercase
+  let result = chord[0].toUpperCase();
+  let i = 1;
+  if (i < chord.length && (chord[i] === "#" || chord[i] === "b")) {
+    result += chord[i];
+    i++;
+  }
+  result += chord.slice(i).toLowerCase();
+  return result;
+}
+
+/**
+ * Splits a token like "GAmD7G7" into "G Am D7 G7" and fixes casing.
  * Returns the original token if it can't be fully parsed as chords.
  */
 function splitConcatenatedChords(token: string): string {
@@ -273,28 +303,24 @@ function splitConcatenatedChords(token: string): string {
   while (remaining.length > 0) {
     const match = SINGLE_CHORD.exec(remaining);
     if (match) {
-      parts.push(match[0]);
+      parts.push(fixChordCase(match[0]));
       remaining = remaining.slice(match[0].length);
     } else {
-      // Remaining text isn't a chord — return original token unchanged
-      // (handles section labels like "Chorus", "Bridge", etc.)
       return token;
     }
   }
 
-  return parts.length > 1 ? parts.join(" ") : token;
+  return parts.length > 1 ? parts.join(" ") : parts[0] || token;
 }
 
 /**
- * Auto-spaces concatenated chords in each line of the input.
- * "CCFC" → "C C F C", "GAmD7G7" → "G Am D7 G7"
- * Leaves already-spaced text and section labels untouched.
+ * Auto-spaces concatenated chords and fixes casing.
+ * "CCFC" → "C C F C", "DM" → "Dm", "EM7" → "Em7"
  */
 export function autoSpaceChords(text: string): string {
   return text
     .split("\n")
     .map((line) => {
-      // Split on existing whitespace, preserving it
       return line
         .split(/(\s+)/)
         .map((segment) => {

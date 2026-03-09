@@ -84,15 +84,24 @@ export default function ChordsDictionaryPage() {
               <h2 className="text-[10px] font-semibold text-muted uppercase tracking-wide mb-2">
                 {category}
               </h2>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-0.5 font-mono text-xs">
-                {entries.map(([name, pattern]) => (
-                  <div key={name} className="flex items-baseline">
-                    <span className="font-bold text-foreground w-14 shrink-0">
-                      {name}
-                    </span>
-                    <span className="text-muted tracking-wider">{pattern}</span>
-                  </div>
-                ))}
+              <div className="flex gap-x-6 font-mono text-xs">
+                {(() => {
+                  const mid = Math.ceil(entries.length / 2);
+                  const col1 = entries.slice(0, mid);
+                  const col2 = entries.slice(mid);
+                  return [col1, col2].map((col, ci) => (
+                    <div key={ci} className="flex-1 space-y-0.5">
+                      {col.map(([name, pattern]) => (
+                        <div key={name} className="flex items-baseline">
+                          <span className="font-bold text-foreground w-14 shrink-0">
+                            {name}
+                          </span>
+                          <span className="text-muted tracking-wider">{pattern}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ));
+                })()}
               </div>
             </div>
           ))}
